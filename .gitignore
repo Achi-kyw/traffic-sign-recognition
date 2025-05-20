@@ -1,3 +1,5 @@
 ImageSet
 *.zip
 __pycache__
+runs
+*.pt
