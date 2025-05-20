@@ -1,5 +1,7 @@
 ImageSet
+SignSet
 *.zip
 __pycache__
 runs
 *.pt
+*.h5
