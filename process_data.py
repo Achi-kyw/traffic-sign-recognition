@@ -5,7 +5,7 @@ import yaml
 image_dir = "ImageSet/images/val"
 label_dir = "ImageSet/smallLabels/val"
 big_label_dir = "ImageSet/bigLabels/val"
-output_dir = "val"
+output_dir = "Text/val"
 yaml_path = "ImageSet/smallLabel_data.yaml"
 yaml_big_path = "ImageSet/bigLabel_data.yaml"
 
@@ -15,11 +15,9 @@ with open(yaml_path, 'r') as f:
     class_names = yaml.safe_load(f)['names']
 with open(yaml_big_path, 'r') as f:
     big_class_names = yaml.safe_load(f)['names']
-
 for img_name in os.listdir(image_dir):
     if not img_name.lower().endswith(('.jpg', '.png', '.jpeg')):
         continue
-
     img_path = os.path.join(image_dir, img_name)
     label_path = os.path.join(label_dir, os.path.splitext(img_name)[0] + ".txt")
     big_label_path = os.path.join(big_label_dir, os.path.splitext(img_name)[0] + ".txt")

@@ -9,6 +9,8 @@ output_dir = "val"
 yaml_path = "ImageSet/smallLabel_data.yaml"
 yaml_big_path = "ImageSet/bigLabel_data.yaml"
 
+model = YOLO("runs/detect/train14/weights/best.pt")
+
 os.makedirs(output_dir, exist_ok=True)
 
 with open(yaml_path, 'r') as f:
