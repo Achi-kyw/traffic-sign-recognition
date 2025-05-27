@@ -1,8 +1,13 @@
 ImageSet
 SignSet
+TestSign
 *.zip
 __pycache__
 runs
 *.pt
 *.h5
 api.txt
+
+.venv
+.DS_Store
+Model*
