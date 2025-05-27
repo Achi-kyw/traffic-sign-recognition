@@ -1,6 +1,7 @@
 import os
 import cv2
 import yaml
+from predict_Mobile import do_mobile_predict
 
 image_dir = "ImageSet/images/val"
 label_dir = "ImageSet/smallLabels/val"
@@ -40,4 +41,6 @@ for img_name in os.listdir(image_dir):
             cv2.imwrite(save_path, cropped)
             print(f"Saved: {save_path}")
             '''
+
+            do_mobile_predict(cls_id, image)
 
