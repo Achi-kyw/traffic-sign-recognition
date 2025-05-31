@@ -6,16 +6,14 @@ from sklearn.metrics import classification_report, confusion_matrix, ConfusionMa
 import matplotlib.pyplot as plt
 import numpy as np
 
-def train_model(index):
-    # 設定參數
+def train_model(index, save_dir):
     img_size = (160, 160)
     batch_size = 8
     epochs = 50
     train_dir = 'SignSet/train/' + str(index)
     val_dir = 'SignSet/val/' + str(index)
-    model_output_path = 'Model7/model_' + str(index) + '.h5'
+    model_output_path = f'{save_dir}/model_{str(index)}.h5'
 
-    # 資料載入與增強
     datagen = ImageDataGenerator(
         rescale=1./255,
         rotation_range=15,
@@ -39,7 +37,6 @@ def train_model(index):
 
     num_classes = train_generator.num_classes
 
-    # 載入 MobileNetV2
     base_model = MobileNetV2(input_shape=img_size + (3,), include_top=False, weights='imagenet')
     base_model.trainable = False
 
@@ -53,7 +50,6 @@ def train_model(index):
 
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-    # 訓練模型，儲存結果
     history = model.fit(
         train_generator,
         validation_data=val_generator,
@@ -62,7 +58,6 @@ def train_model(index):
 
     model.save(model_output_path)
 
-    # 畫 Loss & Accuracy 圖
     plt.figure(figsize=(10, 6))
     plt.plot(history.history['loss'], label='Train Loss')
     plt.plot(history.history['val_loss'], label='Val Loss')
@@ -74,7 +69,7 @@ def train_model(index):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig(f'Model7/training_plot_{index}.png')
+    plt.savefig(f'{save_dir}/training_plot_{index}.png')
 
     # 畫 Confusion Matrix
     val_preds = model.predict(val_generator)
@@ -100,11 +95,14 @@ def train_model(index):
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
     fig.colorbar(im, ax=ax)
     plt.tight_layout()
-    plt.savefig(f"Model7/confusion_matrix_{index}.png", dpi=300)
+    plt.savefig(f"{save_dir}/confusion_matrix_{index}.png", dpi=300)
 
     print(f"Model {index} trained and saved to {model_output_path}")
 
 if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument("--save_dir", type=str, default="mobile_net")
+    args = parser.parse_args()
     for index in range(6):
-        train_model(index)
+        train_model(index, save_dir)
 

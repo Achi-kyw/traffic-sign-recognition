@@ -11,6 +11,8 @@ dependencies:
   - torchaudio
   - torchvision
   - matplotlib
+  - tensorflow
+  - keras
   - pip:
       - ultralytics
       - gdown
@@ -19,3 +21,4 @@ dependencies:
       - peft
       - accelerate
       - bitsandbytes
+      - easyocr

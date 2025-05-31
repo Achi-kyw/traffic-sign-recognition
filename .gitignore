@@ -11,3 +11,5 @@ api.txt
 .venv
 .DS_Store
 Model*
+
+output

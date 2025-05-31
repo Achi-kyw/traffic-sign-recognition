@@ -2,90 +2,50 @@ from ultralytics import YOLO
 import cv2
 import os
 import yaml
+from argparse import ArgumentParser
 
-model = YOLO("runs/detect/train18/weights/best.pt")
-model = YOLO("yolo11n.pt")
-
-
-model.train(
-    data="ImageSet/BigLabel_data.yaml",
-    epochs=50,
-    imgsz=1920,
-    batch=8
-)
-
-metrics = model.val()
-print(metrics)
-
-img_path = "ImageSet/images/train/00000_000000005586.jpg"
-output_dir = "object"
-model_path = "runs/detect/train8/weights/best.pt"
-yaml_path = "ImageSet/smallLabel_data.yaml"
-os.makedirs(output_dir, exist_ok=True)
-
-with open(yaml_path, 'r') as f:
-    class_names = yaml.safe_load(f)['names']
-
-
-model = YOLO(model_path)
-results = model.predict(source=img_path, save=False)
-
-image = cv2.imread(img_path)
-
-for i, result in enumerate(results):
-    boxes = result.boxes
-    for j, box in enumerate(boxes):
-        cls_id = int(box.cls[0])
-        conf = float(box.conf[0])
-        class_name = class_names[cls_id]
-        xyxy = box.xyxy[0].cpu().numpy().astype(int)  # [x1, y1, x2, y2]
-        
-        x1, y1, x2, y2 = xyxy
-        cropped = image[y1:y2, x1:x2]
-
-        filename = f"img{i}_obj{j}_{class_name}_{conf:.2f}.jpg"
-        save_path = os.path.join(output_dir, filename)
-        cv2.imwrite(save_path, cropped)
-        print(f"Saved: {save_path}")
-
-        
-'''
-
-# results = model.predict(source="your_image.jpg", save=True)
-
-results = model.predict(source="ImageSet/images/val", save=True)
-
-# results = model.predict(source="test_image", save=True)
+def train(model,data_path,yaml_path,train_output_dir):
+    model = YOLO(model)
+    if os.path.exists(data_path):
+        os.rename(data_path, "ImageSet/labels")
+    cwd = os.getcwd()
+    data_path = os.path.join(cwd, yaml_path)
+    model.train(
+        data=data_path,
+        epochs=50,
+        imgsz=1920,
+        batch=8,
+        hsv_h=0.01,
+        hsv_v=0.6,
+        device=2,
+        name=train_output_dir,
+        exist_ok=True
+    )
+    metrics = model.val()
+    if os.path.exists("ImageSet/labels"):
+        os.rename("ImageSet/labels", data_path)
+    return model
 
 
-img_path = "ImageSet/images/train/00000_000000005586.jpg"
-output_dir = "object"
-model_path = "runs/detect/train8/weights/best.pt"
-yaml_path = "ImageSet/smallLabel_data.yaml"
-os.makedirs(output_dir, exist_ok=True)
+def test(testdata_path, testdata_output, model):
 
-with open(yaml_path, 'r') as f:
-    small_class_names = yaml.safe_load(f)['names']
+    results = model.predict(source=testdata_path, save=True, name=testdata_path)
 
-model = YOLO(model_path)
-results = model.predict(source=img_path, save=False)
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument("--model", type=str, default="yolo11n.pt")
+    parser.add_argument("--data_path", type=str, default="ImageSet/bigLabels")
+    parser.add_argument("--yaml_path", type=str, default="ImageSet/bigLabel_data.yaml")
+    parser.add_argument("--train_output_dir", type=str, default="yolo")
+    parser.add_argument("--evaluate_output_dir", type=str, default="yolo")
+    parser.add_argument("--testdata_path", type=str, default=None)
+    parser.add_argument("--testdata_output", type=str, default="yolo_test")
+    args = parser.parse_args()
+    return args
 
-image = cv2.imread(img_path)
-
-for i, result in enumerate(results):
-    boxes = result.boxes
-    for j, box in enumerate(boxes):
-        cls_id = int(box.cls[0])
-        conf = float(box.conf[0])
-        print(f"Image {i}, Object {j}: Class ID: {cls_id}, Confidence: {conf:.2f}")
-        class_name = small_class_names[cls_id]
-        xyxy = box.xyxy[0].cpu().numpy().astype(int)  # [x1, y1, x2, y2]
-        print(xyxy)
-        x1, y1, x2, y2 = xyxy
-        cropped = image[y1:y2, x1:x2]
-
-        filename = f"img{i}_obj{j}_{class_name}_{conf:.2f}.jpg"
-        save_path = os.path.join(output_dir, filename)
-        cv2.imwrite(save_path, cropped)
-        print(f"Saved: {save_path}")
-'''
+if __name__ == "__main__":
+    args = parse_args()
+    # model = train(args.model,args.data_path,args.yaml_path,args.train_output_dir)
+    model = YOLO("")
+    if agrs.testdata_path is not None:
+        test(args.testdata_path, args.testdata_output, model)
