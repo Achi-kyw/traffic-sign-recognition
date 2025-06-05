@@ -9,6 +9,7 @@ A traffic sign recognition focus on Taiwan, for more detail, please refer to
 ```
 conda env create -f environment.yml
 conda activate traffic
+pip install -r requirements.txt
 ```
 
 ## Generate Training Data
