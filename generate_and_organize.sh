@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script generates a dataset using the provided background images and templates
 # and organizes the output into a specific directory structure for YOLO model training.
-## Usage: ./generate_and_organize.sh <bgs_path> <templates_path> <out_path> <train_images> <val_images>
+## Usage: sh generate_and_organize.sh <bgs_path> <templates_path> <out_path> <train_images> <val_images>
 #the python script is modified from https://github.com/LCAD-UFES/publications-tabelini-ijcnn-2019/
 BGS_PATH="$1"
 TEMPLATES_PATH="$2"

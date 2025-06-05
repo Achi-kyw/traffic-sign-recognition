@@ -14,7 +14,7 @@ conda activate traffic
 ## Generate Training Data
 
 ```
-bash generate_and_organize.sh
+sh generate_and_organize.sh <bgs_path> <templates_path> <out_path> <train_images> <val_images>
 ```
 
 ## Train YOLO
