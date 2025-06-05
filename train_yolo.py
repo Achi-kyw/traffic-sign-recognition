@@ -9,13 +9,13 @@ def train(model,data_path,yaml_path,train_output_dir):
     if os.path.exists(data_path):
         os.rename(data_path, "ImageSet/labels")
     cwd = os.getcwd()
-    data_path = os.path.join(cwd, yaml_path)
+    new_data_path = os.path.join(cwd, yaml_path)
     model.train(
-        data=data_path,
+        data=new_data_path,
         epochs=50,
         imgsz=1920,
         batch=8,
-        hsv_h=0.01,
+        hsv_h=0.005,
         hsv_v=0.6,
         device=2,
         name=train_output_dir,
@@ -28,7 +28,7 @@ def train(model,data_path,yaml_path,train_output_dir):
 
 
 def test(testdata_path, testdata_output, model):
-    results = model.predict(source=testdata_path, save=True, name=testdata_path)
+    results = model.predict(source=testdata_path, save=True, name=testdata_output)
 
 def parse_args():
     parser = ArgumentParser()
@@ -44,5 +44,6 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
     model = train(args.model,args.data_path,args.yaml_path,args.train_output_dir)
-    if agrs.testdata_path is not None:
+    # model = YOLO("runs/detect/yolo_640/weights/best.pt")
+    if args.testdata_path is not None:
         test(args.testdata_path, args.testdata_output, model)
