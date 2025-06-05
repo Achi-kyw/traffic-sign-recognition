@@ -15,7 +15,6 @@ dependencies:
   - keras
   - pip:
       - ultralytics
-      - gdown
       - transformers
       - datasets
       - peft

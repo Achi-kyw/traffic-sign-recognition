@@ -23,6 +23,6 @@ def predict_image(model_index, model_path, img):
     return (pred_class, confidence)
     # print(f"Prediction: {pred_class} (confidence: {confidence:.4f})")
 
-def do_mobile_predict(model_index, img):
-    model_path = "Model7/model_" + str(model_index) + ".h5"
+def do_mobile_predict(model_index, img, model_path):
+    model_path = f"{model_path}/model_" + str(model_index) + ".h5"
     return predict_image(model_index, model_path, img)

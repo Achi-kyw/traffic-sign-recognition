@@ -28,7 +28,6 @@ def train(model,data_path,yaml_path,train_output_dir):
 
 
 def test(testdata_path, testdata_output, model):
-
     results = model.predict(source=testdata_path, save=True, name=testdata_path)
 
 def parse_args():
@@ -37,7 +36,6 @@ def parse_args():
     parser.add_argument("--data_path", type=str, default="ImageSet/bigLabels")
     parser.add_argument("--yaml_path", type=str, default="ImageSet/bigLabel_data.yaml")
     parser.add_argument("--train_output_dir", type=str, default="yolo")
-    parser.add_argument("--evaluate_output_dir", type=str, default="yolo")
     parser.add_argument("--testdata_path", type=str, default=None)
     parser.add_argument("--testdata_output", type=str, default="yolo_test")
     args = parser.parse_args()
@@ -45,7 +43,6 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    # model = train(args.model,args.data_path,args.yaml_path,args.train_output_dir)
-    model = YOLO("")
+    model = train(args.model,args.data_path,args.yaml_path,args.train_output_dir)
     if agrs.testdata_path is not None:
         test(args.testdata_path, args.testdata_output, model)
