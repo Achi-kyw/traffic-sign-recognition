@@ -5,6 +5,9 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import numpy as np
+import json
+import os
+from argparse import ArgumentParser
 
 def train_model(index, save_dir):
     img_size = (160, 160)
@@ -95,7 +98,28 @@ def train_model(index, save_dir):
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
     fig.colorbar(im, ax=ax)
     plt.tight_layout()
-    plt.savefig(f"{save_dir}/confusion_matrix_{index}.png", dpi=300)
+    plt.savefig(f"{save_dir}/confusion_matrix_{index}.png", dpi=300) 
+
+    results = {
+        'model_index': index,
+        'accuracy': history.history['accuracy'][-1],
+        'val_accuracy': history.history['val_accuracy'][-1],
+        'loss': history.history['loss'][-1],
+        'val_loss': history.history['val_loss'][-1],
+    }
+
+    all_metrics_path = os.path.join(save_dir, "all_metrics.json")
+
+    if os.path.exists(all_metrics_path):
+        with open(all_metrics_path, 'r') as f:
+            metrics_data = json.load(f)
+    else:
+        metrics_data = []
+
+    metrics_data.append(results)
+
+    with open(all_metrics_path, 'w') as f:
+        json.dump(metrics_data, f, indent=4)
 
     print(f"Model {index} trained and saved to {model_output_path}")
 
@@ -103,6 +127,7 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--save_dir", type=str, default="mobile_net")
     args = parser.parse_args()
+    save_dir = args.save_dir
     for index in range(6):
         train_model(index, save_dir)
 
