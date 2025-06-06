@@ -15,9 +15,9 @@ def train(model,data_path,yaml_path,train_output_dir):
         epochs=50,
         imgsz=1920,
         batch=8,
-        hsv_h=0.005,
+        hsv_h=0.020,
         hsv_v=0.6,
-        device=2,
+        device=0,
         name=train_output_dir,
         exist_ok=True
     )

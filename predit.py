@@ -7,7 +7,7 @@ from tqdm import tqdm
 from utils.easy_ocr import do_easyocr
 import logging
 from groq import Groq
-
+from argparse import ArgumentParser
 
 def main(yolo_model_path, mobilenet_model_path, image_dir, yaml_small_path, yaml_big_path, output_dir):
     with open('api.txt','r') as f:
@@ -69,7 +69,7 @@ def main(yolo_model_path, mobilenet_model_path, image_dir, yaml_small_path, yaml
             with open(txt_path,"a") as f:
                 print("未偵測到任何號誌",file=f)
             continue
-        text_message = f'我拿到一張街景圖片，並偵測出以下路牌資訊以及路牌在圖片上的座標。請將路牌在圖片上的位置納入考量，並依據這些資訊總結出一項【給駕駛的指示】。路牌資訊與座標：{data}。重要指令：1. 你的最終回答【必須且只能】包含【一組】`【` 和 `】` 符號。2. 這組`【` 和 `】` 符號內【必須只包含】最終總結出的那一項駕駛指示，不要有其他文字。3. 【不要】輸出任何額外的 `【】` 符號。\請直接以繁體中文輸出這項指示。例如，你的最終輸出應該是像這樣：【前方路口請右轉】'
+        text_message = f'我拿到一張街景圖片，並偵測出以下路牌資訊以及路牌在圖片上的座標。請將路牌在圖片上的位置納入考量，並依據這些資訊總結出一些【給駕駛的指示】。路牌資訊與座標：{data}。重要指令：1. 你的最終回答【必須且只能】包含【一組】`【` 和 `】` 符號。2. 這組`【` 和 `】` 符號內【必須只包含】最終總結出的駕駛指示，不要有其他文字。3. 【不要】輸出任何額外的 `【】` 符號。請直接以繁體中文輸出這項指示。'
         response = client.chat.completions.create(
             messages=[
                 {

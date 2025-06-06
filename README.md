@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A traffic sign recognition focus on Taiwan, for more detail, please refer to
+A traffic sign recognition focus on Taiwan, for more detail, please refer to the [report](https://drive.google.com/file/d/1FvdzX4kdZ9y1QLlt7XwB3SbjOV-ZtZyL/view?usp=sharing)
 
 ## Setup
 
@@ -17,6 +17,8 @@ pip install -r requirements.txt
 ```
 sh generate_and_organize.sh <bgs_path> <templates_path> <out_path> <train_images> <val_images>
 ```
+
+Note that you should prepare your own background image
 
 ## Train YOLO
 
