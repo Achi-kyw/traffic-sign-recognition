@@ -28,7 +28,7 @@ python train_yolo.py
 
 You can set some argument as follows
 
-- `model`: YOLO model's name. Eefault "yolo11n.pt".
+- `model`: YOLO model's name. Default "yolo11n.pt".
 - `data_path`: Where label for YOLO are. Default "ImageSet/bigLabels".
 - `yaml_path`: Where data information for YOLO are. Default "ImageSet/bigLabel_data.yaml".
 - `data_path`: Where YOLO's ourput want to be, it will actually put under `runs/detect/`. Default "yolo".
